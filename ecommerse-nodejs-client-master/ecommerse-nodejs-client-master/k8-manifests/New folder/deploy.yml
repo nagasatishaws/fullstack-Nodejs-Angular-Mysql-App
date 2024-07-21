@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  metadata:
+  labels:
+    app.kubernetes.io/name: ecommerse-ui
+    app.kubernetes.io/instance: ecommerse-ui
+    app.kubernetes.io/version: '1.0.0'
+    app.kubernetes.io/managed-by: kubectl
+  name: ecommerse-ui
+  namespace: staging
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: ecommerse-ui
+  template:
+    metadata:
+      labels:
+        app: ecommerse-ui
+    spec:
+      containers:
+      - name: ecommerse-ui
+        image: 458945282092.dkr.ecr.ap-south-1.amazonaws.com/angularfrontend:2
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "250Mi"
+            cpu: "200m"
+          limits:
+            memory: "1.5Gi"
+            cpu: "1000m"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: role
+                operator: In
+                values:
+                - staging

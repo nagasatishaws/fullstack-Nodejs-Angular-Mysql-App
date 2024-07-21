@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx3
+  labels:
+    app: nginx3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx3
+  template:
+    metadata:
+      labels:
+        app: nginx3   
+    spec:
+      containers:
+      - name: nginx3
+        image: nagasatishdocker/ecomserver:2
+        ports:
+        - containerPort: 8080
